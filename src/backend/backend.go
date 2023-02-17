@@ -18,11 +18,13 @@ func helloWorld(w http.ResponseWriter, r *http.Request){
 	fmt.Fprintf(w, "Hello World")
 }
 
-func (a *App) Initialize(){
-	a.DB, err := sql.Open("sqlite3", "../../practiceit.db")
-	if err !=nil {
+func (a *App) Initialize() {
+	DB, err := sql.Open("sqlite3", "../../practiceit.db")
+	if err != nil {
 		log.Fatal(err.Error())
 	}
+
+	a.DB = DB
 }
 
 func (a *App) Run(){
