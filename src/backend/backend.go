@@ -7,11 +7,13 @@ import (
 	"net/http"
 
 	_ "github.com/mattn/go-sqlite3"
+	"gopkg.in/DataDog/dd-trace-go.v1/contrib/gorilla/mux"
 )
 
 type App struct{
-	DB   *sql.DB
-	Port string
+	DB     *sql.DB
+	Port   string
+	Router *mux.Router
 }
 
 func helloWorld(w http.ResponseWriter, r *http.Request){
@@ -25,6 +27,8 @@ func (a *App) Initialize() {
 	}
 
 	a.DB = DB
+	a.Router = mux.NewRouter()
+	a.initializeRoutes()
 }
 
 func (a *App) Run(){
@@ -33,3 +37,6 @@ func (a *App) Run(){
 	log.Fatal(http.ListenAndServe(a.Port, nil))
 }
 
+func (a *App) initializeRoutes() {
+	a.Router.HandleFunc("/", helloWorld)
+}
